@@ -11,7 +11,7 @@ namespace ChatRoom
     {
         static void Main(string[] args)
         {
-            var server = new TaskBasedHttpServer(5002);
+            var server = new TaskBasedHttpServer(5002, "public");
             var rman = new RoomManager();
 
             server.Get("/", (req, res) =>
@@ -20,6 +20,11 @@ namespace ChatRoom
                 {
                     {"url", "Main"}
                 });
+            });
+
+            server.Get("favicon.ico", (req, res) =>
+            {
+                res.SendFile("pages/favicon.ico");
             });
 
             server.Get("/:room", (req, res) =>
@@ -36,6 +41,9 @@ namespace ChatRoom
                 var room = HttpUtility.UrlDecode(req.Params["room"]).ToLowerInvariant();
                 rman.Join(room, wsd);
             });
+
+            server.InitializeDefaultPlugins(false);
+
 
             server.Start(true);
         }
