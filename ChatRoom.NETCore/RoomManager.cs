@@ -1,8 +1,8 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using RedHttpServer.Request;
+using RedHttpServer;
 
-namespace ChatRoom
+namespace ChatRoom.NETCore
 {
     class RoomManager
     {
@@ -18,7 +18,6 @@ namespace ChatRoom
             }
             r.Add(wsd);
             wsd.OnClosed += (sender, args) => LeaveRoom(room, r, wsd);
-            wsd.Ready();
         }
 
         private void LeaveRoom(string r, Room room, WebSocketDialog wsd)

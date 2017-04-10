@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en"->
+    <head>
+        <meta charset="UTF-8">
+        <title>Chat - <% url %></title>
+        <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.9.0/js/lightbox.min.js"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.9.0/css/lightbox.min.css" rel="stylesheet">
+
+        <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+        <link rel="icon" type="image/png" href="/icons/favicon-32x32.png" sizes="32x32">
+        <link rel="icon" type="image/png" href="/icons/favicon-16x16.png" sizes="16x16">
+        <link rel="manifest" href="/icons/manifest.json">
+        <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#5bbad5">
+        <link rel="shortcut icon" href="/icons/favicon.ico">
+        <meta name="msapplication-config" content="/icons/browserconfig.xml">
+        <meta name="theme-color" content="#ffffff">
+        <style>
+            *{
+                font-family: 'Lato', sans-serif;
+                overflow-x: hidden;
+                margin: 0;
+                padding: 0;
+                color: #dcdcdc;
+            }
+            html, body{
+                background-color: #424242;
+                height:100%;
+            }
+            a {
+                color: #7986CB;
+            }
+            img{
+                max-height: 80px;
+                display: inline;
+            }
+            header{
+                height: 40px;
+                background-color: #282828;
+            }
+            #changename{
+                color: #7F7F7F;
+                font-size: 10pt;
+            }
+            #tenmin{
+                font-size: 10pt;
+            }
+
+            footer{
+                background-color: #282828;
+                height: 40px;
+            }
+            #in{
+                height: calc(100% - 80px);
+                list-style: none;
+            }
+
+            #in li{
+                max-height: 80px;
+                overflow-y: hidden;
+                list-style: none;
+                font-size: 13pt;
+            }
+
+            #in li:nth-child(odd){
+                background-color: #525252;
+            }
+
+            #in::-webkit-scrollbar {
+                width: 0.6em;
+                height: 0.6em;
+            }
+
+            #in::-webkit-scrollbar-track {
+                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            }
+
+            #in::-webkit-scrollbar-thumb {
+                background-color: #757575;
+                outline: 1px solid slategrey;
+            }
+
+            #count{
+                text-align: right;
+                padding-right: 8px;
+                font-size: 12pt;
+            }
+            #room{
+                font-size: 12pt;
+                padding-left: 8px;
+                text-align: left;
+            }
+            .sender{
+                line-height: 25px;
+                margin-left: 8px;
+                display: inline-block;
+                overflow-y: hidden;
+
+            }
+            .message{
+                line-height: 25px;
+                margin-left: 8px;
+                display: inline-block;
+                text-wrap: none;
+                overflow-y: hidden;
+            }
+            .time{
+                line-height: 25px;
+                display: inline-block;
+                float: right;
+                margin-right: 8px;
+                overflow-y: hidden;
+            }
+            #out{
+                padding-left: 8px;
+                line-height: 100%;
+                height: 100%;
+                width: 100%;
+                background-color: #282828;
+                border: none;
+                font-size: 15pt;
+                outline: none;
+                -webkit-appearance:none
+            }
+            #out:focus{
+                outline: none;
+            }
+            #out-td{
+                width: 90%;
+                min-width: 90%;
+                max-width: calc(100% - 100px);
+                height: 100%;
+            }
+            table{
+                height:40px;
+                border-collapse: collapse;
+            }
+            td{
+                height:36px;
+                text-align: center;
+            }
+            #send{
+                width: 100%;
+                height: 100%;
+                border: none;
+                min-width: 5em;
+                font-size: 15pt;
+                background-color: #616161;
+                overflow-y: hidden;
+            }
+            #send-td{
+                width: 10%;
+                min-width: 5em;
+                height: 100%;
+                padding: 0;
+                margin:0;
+                overflow-y: hidden;
+            }
+
+            form{
+                display: none;
+            }
+            form > input[type=text]{
+                border: none;
+                border-radius: 2px;
+                background-color: #545454;
+                padding-left: 3px;
+                outline: none;
+                line-height: 18pt;
+            }
+            .hyperlook{
+                border: none;
+                text-decoration: underline;
+                background-color: #282828;
+                outline: none;
+                cursor: pointer;
+                line-height: 18pt;
+            }
+        </style>
+    </head>
+    <body>
+        <meta name="viewport" content="width=device-width, user-scalable=no initial-scale=0.65">
+        <header>
+            <table style="width: 100%;" >
+                <tbody>
+                <tr>
+                    <td id="room">Room: <% url %></td>
+                    <td>
+                        <button id="changename" class="hyperlook">Change name</button>
+                        <form>
+                            <input title="Name" id="newname" type="text" maxlength="10" pattern="\w{2,10}">
+                            <input type="submit" value="OK" class="hyperlook">
+                        </form>
+                    </td>
+                    <td><a target="_blank" id="tenmin" href="https://10min.host">Need to send a file? Try 10min.host</a></td>
+                    <td id="count">People: 0</td>
+                </tr>
+                </tbody>
+            </table>
+        </header>
+        <ul id="in"></ul>
+        <footer>
+            <table style="width: 100%;" >
+                <tbody>
+                <tr>
+                    <td id="out-td"><input type="text" id="out" maxlength="160" disabled="disabled"></td>
+                    <td id="send-td"><button id="send" disabled="disabled">Send</button></td>
+                </tr>
+                </tbody>
+            </table>
+        </footer>
+        <script>
+            var room = "<% url %>";
+            var unread = 0;
+            var $in = $("#in"), $out = $("#out");
+            var $send = $("#send");
+            var $count = $("#count");
+            var $cname = $("#changename");
+            var urlRegex = /^(https?:\/\/.)?([\-\w]+\.){0,5}[\-\w]{1,256}\.[a-z]{2,6}(:[0-9]{2,5})?(\/[\w\-]+)*(\.[\w\-]+)?(\?([\w\-@:%_\+.~#?&/=\[\]])*)?$/i;
+            var picRegex = /.(jpeg|jpg|gif|png|bmp)$/i;
+//            var ws = new WebSocket("wss://" + location.host + "/ws/" + room);
+            var ws = new WebSocket("ws://localhost:5002/ws/" + room);
+            var autoScroll = true, window_focus = true, _top = $in.scrollTop();
+            $("form").submit(function (ev) {
+                ev.preventDefault();
+                var v = $("#newname").val();
+                if (v.length > 1 && v.length < 11)
+                    localStorage.setItem("name", v);
+                if (v.length > 10) return;
+                $("#newname").val("");
+                $("form").hide();
+                $cname.show();
+                $out.focus();
+            });
+            $cname.click(function () {
+                $cname.hide();
+                $("form").show();
+            });
+
+            $(window).focus(function() {
+                window_focus = true;
+                if (autoScroll){
+                    unread = 0;
+                    setTitle();
+                }
+            }).blur(function() {
+                window_focus = false;
+            });
+            function setTitle() {
+                if (unread == 0){
+                    document.title = room + " - AChat"
+                }
+                else
+                    document.title = "(" + unread + ") " + room + " - AChat"
+            }
+            ws.onmessage = function (text) {
+                var zchar = text.data.charAt(0);
+                if (zchar == "m"){
+                    var y = text.data.substr(0).indexOf(":");
+                    var sender = text.data.substr(1, y-1);
+                    var msg = text.data.substr(y+1);
+                    var setTitle = true;
+                    if (urlRegex.test(msg)) {
+                        if (picRegex.test(msg))
+                            msg = "<a href='"+ msg +"' data-lightbox='" + randomStr(3) + msg.substr(msg.lastIndexOf("/")+1) + "'><img src='" + msg+ "'></img></a>";
+                        else
+                            msg = "<a target='_blank' href='"+ msg +"'>" + msg + "</a>";
+                        setTitle = false;
+                    }
+                    else msg = htmlEncode(msg);
+                    sender = htmlEncode(sender);
+                    $in.append(htmlMsgWrap(sender, msg, setTitle));
+                    scroll(sender, msg);
+                }
+                else if (zchar == "c")
+                    $count.text("People: " + text.data.substr(1));
+//                else if (zchar == "j"){
+//
+//                }
+//                else if (zchar == "n"){
+//
+//                }
+            };
+
+            function htmlMsgWrap(sender, msg, setTitle) {
+                return "<li>"+
+                    "<div class='sender'>" +
+                    sender + " :" +
+                    "</div>" +
+                    "<div class='message'" + (setTitle ? " title='"+sender+"'" : "") + "'>" +
+                    msg +
+                    "</div>" +
+                    "<div class='time' title='"+timestamp(false)+"'>"+
+                    timestamp(true)+
+                    "</div>" +
+                    "</li>";
+            }
+            function scroll(sender, msg) {
+                if(autoScroll)
+                    $in.animate({scrollTop: $in[0].scrollHeight}, 5);
+                else {
+                    unread++;
+                    setTitle();
+                }
+                if (!window_focus)
+                    notification(sender, msg);
+            }
+            function getName() {
+                var n = localStorage.getItem("name");
+                if (n == null || n.length < 2){
+                    n = randomStr(8);
+                    localStorage.setItem("name", n);
+                }
+                else if (n.length > 10){
+                    n = n.substr(0, 10);
+                    localStorage.setItem("name", n);
+                }
+                return n;
+            }
+            function timestamp(short) {
+                var now = new Date();
+                return now.toLocaleTimeString() + (short ? "" : " " + now.toLocaleDateString());
+            }
+            function htmlEncode(s) {
+                return $('<div/>').text(s).html();
+            }
+            function randomStr(len) {
+                return Math.random().toString(36).substring(len);
+            }
+            ws.onopen = function () {
+                $send.prop('disabled', false);
+                $out.removeAttr('disabled');
+                $out.focus();
+                console.log("connected");
+            };
+            ws.onclose = function () {
+                $send.prop('disabled', true);
+                $out.attr({'disabled': 'disabled'});
+                console.log("disconnected");
+            };
+            $send.click(function () {
+                var text = $out.val();
+                if (text == "") return;
+                ws.send("m" + getName() + ":" + text);
+                $out.val("");
+            });
+            $out.keydown(function (event) {
+                if (event.keyCode == 13)
+                {
+                    event.preventDefault();
+                    $send.click();
+                }
+            });
+            window.onbeforeunload = function(e) {
+                ws.close();
+            };
+
+            $in.scroll(function(){
+                var _cur_top = $in.scrollTop();
+                autoScroll = _top < _cur_top && $in.scrollTop() + $in.innerHeight() >= $in[0].scrollHeight;
+                _top = _cur_top;
+                if (autoScroll)
+                {
+                    unread = 0;
+                    setTitle();
+                }
+            });
+
+            document.addEventListener('DOMContentLoaded', function () {
+                if (!Notification) {
+                    alert('Desktop notifications not available in your browser.');
+                    return;
+                }
+                if (Notification.permission !== "granted")
+                    Notification.requestPermission();
+            });
+            function notification(sender, msg) {
+                if (Notification.permission !== "granted")
+                    Notification.requestPermission();
+                else {
+                    var notification = new Notification(sender + " wrote:", {
+                        icon: '/icons/android-chrome-192x192.png',
+                        body: msg
+                    });
+                    notification.onclick = function () {
+                        parent.focus();
+                        window.focus();
+                        this.close();
+                        $in.scrollTop= $in[0].scrollHeight;
+                    };
+                }
+            }
+        </script>
+    </body>
+</html>

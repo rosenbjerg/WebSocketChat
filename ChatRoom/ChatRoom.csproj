@@ -37,9 +37,8 @@
       <HintPath>..\packages\HttpMultipartParser.2.2.3\lib\net452\HttpMultipartParser.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="RHttpServer, Version=1.0.4.4, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RHttpServer.1.0.4.4\lib\net452\RHttpServer.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="RedHttpServer.NET45, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RHttpServer.2.0.0\lib\net452\RedHttpServer.NET45.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Text, Version=4.5.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.Text.4.5.4\lib\net45\ServiceStack.Text.dll</HintPath>

@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using RedHttpServer.Response;
+using System.Text.Encodings.Web;
+using RedHttpServer.Rendering;
 
-namespace ChatRoom
+namespace ChatRoom.NETCore
 {
     class Program
     {
         static void Main(string[] args)
         {
-            var server = new RedHttpServer.RedHttpServer(5002, "");
+            var server = new RedHttpServer.RedHttpServer(5002, "public");
             var rman = new RoomManager();
 
             server.Get("/", (req, res) =>
@@ -29,23 +26,21 @@ namespace ChatRoom
 
             server.Get("/:room", (req, res) =>
             {
-                var room = HttpUtility.UrlDecode(req.Params["room"]);
+                var room = System.Net.WebUtility.UrlDecode(req.Params["room"]);
                 res.RenderPage("pages/index.ecs", new RenderParams
                 {
                     {"url", room}
                 });
             });
 
-            server.WebSocket("/:room", (req, wsd) =>
+            server.WebSocket("/ws/:room", (req, wsd) =>
             {
-                var room = HttpUtility.UrlDecode(req.Params["room"]).ToLowerInvariant();
+                var room = System.Net.WebUtility.UrlDecode(req.Params["room"]).ToLowerInvariant();
                 rman.Join(room, wsd);
+
             });
-
-            server.InitializePlugins(false);
-
-
             server.Start(true);
+            Console.Read();
         }
     }
 }
