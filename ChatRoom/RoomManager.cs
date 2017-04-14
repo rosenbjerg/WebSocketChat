@@ -18,7 +18,6 @@ namespace ChatRoom
             }
             r.Add(wsd);
             wsd.OnClosed += (sender, args) => LeaveRoom(room, r, wsd);
-            wsd.Ready();
         }
 
         private void LeaveRoom(string r, Room room, WebSocketDialog wsd)

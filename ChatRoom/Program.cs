@@ -36,7 +36,7 @@ namespace ChatRoom
                 });
             });
 
-            server.WebSocket("/:room", (req, wsd) =>
+            server.WebSocket("ws/:room", (req, wsd) =>
             {
                 var room = HttpUtility.UrlDecode(req.Params["room"]).ToLowerInvariant();
                 rman.Join(room, wsd);
