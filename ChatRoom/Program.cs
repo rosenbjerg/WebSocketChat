@@ -13,7 +13,7 @@ namespace ChatRoom
         {
             var server = new RedHttpServer.RedHttpServer(5002, "");
             var rman = new RoomManager();
-
+            
             server.Get("/", (req, res) =>
             {
                 res.RenderPage("pages/index.ecs", new RenderParams

@@ -39,6 +39,7 @@ namespace ChatRoom.NETCore
                 rman.Join(room, wsd);
 
             });
+            server.InitializePlugins(false);
             server.Start(true);
             Console.Read();
         }
