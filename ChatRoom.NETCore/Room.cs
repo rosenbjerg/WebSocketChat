@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using RedHttpServerCore.Response;
+using Red;
 
 namespace ChatRoom.NETCore
 {

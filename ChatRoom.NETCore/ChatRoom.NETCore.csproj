@@ -3,10 +3,12 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="RHttpServer" Version="2.0.5" />
+    <PackageReference Include="Red.EcsRenderer" Version="1.2.0" />
+    <PackageReference Include="RHttpServer" Version="3.5.2" />
   </ItemGroup>
 
 </Project>
